@@ -1,0 +1,146 @@
+whis`whis`whis
+
+```C++
+#include <iostream>
+#include "my_utility.h"
+
+// 第1层: 两个独立的基类
+struct A { int a_val = 1; };
+struct B {
+    virtual ~B() = default;
+    int b_val = 2;
+    void print_nv()
+    {
+        // 该函数的 this 指针应当指向一个 B 对象
+        std::cout << "B::print_nv" << std::endl;
+    }
+
+    virtual void print_v()
+    {
+        std::cout << "B::print_v" << std::endl;
+    }
+};
+
+// 第2层: C 多重继承 A 和 B
+// 内存布局: [ A subobject | B subobject | C members ]
+struct C : public A, public B {
+    int c_val = 3;
+    void print_nv()
+    {
+        // 该函数的 this 指针应当指向一个 C 对象
+        std::cout << "C::print_nv" << std::endl;
+    }
+
+    void print_v() override
+    {
+        std::cout << "C::print_v" << std::endl;
+    }
+};
+
+// 第3层: D 单继承 C
+// 内存布局: [ C subobject { A subobject | B subobject | C members } | D members ]
+struct D : public C {
+    int d_val = 4;
+    void print_nv()
+    {
+        // 该函数的 this 指针应当指向一个 D 对象
+        std::cout << "D::print_nv" << std::endl;
+    }
+
+    void print_v() override
+    {
+        std::cout << "D::print_v" << std::endl;
+    }
+};
+
+int main() {
+    // 步骤1：创建一个指向 C 成员的指针 p_c，并让它指向 B::print_nv
+    // 在这个赋值过程中，编译器计算出 B 在 C 中的偏移量，并存入 p_c 的 adj 字段。
+    // p_c 的 adj != 0
+    void (C::*p_c)() = &B::print_nv;
+
+    // 步骤2：创建一个最终派生类 D 的对象
+    D d_obj;
+
+    // 步骤3：通过 D 的对象调用 p_c
+    // 这里的调用会同时触发两种调整, 即编译期需要对左操作数隐式转换, 且adj不为0
+    (d_obj.*p_c)();
+
+    std::cout << sizeof(p_c) << std::endl;
+    std::cout << MemberFunctionPointer(p_c) << std::endl;
+    std::cout << std::endl;
+
+
+    B b; C c; D d;
+
+    std::cout << "void (B::*mf_B_nv)() = &B::print_nv;" << std::endl;
+    void (B::*mf_B_nv)() = &B::print_nv; // 赋值时前后类型匹配
+    std::cout << MemberFunctionPointer(mf_B_nv) << std::endl; // (0,0x7ff70b2b2ea0)
+    (b.*mf_B_nv)();
+    (c.*mf_B_nv)();
+    (d.*mf_B_nv)();
+    std::cout << std::endl;
+
+    std::cout << "void (B::*mf_B_v)() = &B::print_v;" << std::endl;
+    void (B::*mf_B_v)() = &B::print_v;
+    std::cout << MemberFunctionPointer(mf_B_v) << std::endl; // (0,0x11)
+    // 0x11 为编码后的vtable信息。根据Itanium C++ ABI规范：
+    // 最低位 (LSB)：用来区分虚函数和非虚函数调用。如果 LSB 是 1，表示这是一个虚函数调用。0x11 的二进制最低位是 1，所以这是一个虚调用。
+    // 其他位：将整个数右移一位（ptr >> 1），得到的值是该虚函数在 vtable 中的字节偏移量(8, 即第二个虚函数, 第一个是虚析构函数)。
+    (b.*mf_B_v)();
+    (c.*mf_B_v)();
+    (d.*mf_B_v)();
+    std::cout << std::endl;
+
+    std::cout << "void (C::*mf_C_nv)() = &B::print_nv;" << std::endl;
+    void (C::*mf_C_nv)() = &B::print_nv;
+    std::cout << MemberFunctionPointer(mf_C_nv) << std::endl;
+    /* (b.*mf_C_nv)(); */ std::cout << "(b.*mf_C_nv)(); // compile error" << std::endl;
+    (c.*mf_C_nv)();
+    (d.*mf_C_nv)();
+    std::cout << std::endl;
+
+    std::cout << "void (C::*mf_C_nv)() = &B::print_nv;" << std::endl;
+    void (C::*mf_C_v)() = &B::print_v; // 此处类型不匹配, 根据 Itanium C++ ABI, adj 会被设置为 B 相对于 C 的偏移; 但实际情况取决于编译器优化
+    std::cout << MemberFunctionPointer(mf_C_v) << std::endl; // (0,0x7ff70b2b2ea0)(成员函数本身或 Thunk)
+    /* (b.*mf_C_v)(); */ std::cout << "(b.*mf_C_v)(); // compile error" << std::endl;
+    (c.*mf_C_v)();
+    (d.*mf_C_v)();
+    std::cout << std::endl;
+
+    // 1. 为成员函数指针赋值时, 若将基类的成员函数指针赋值给派生类成员函数指针变量, 则 adj 的值被设置为基类相对于派生类的偏移量.
+    // 2. .* 或 ->* 运算符函数调用时, 若通过派生类指针调用基类成员函数, 则编译器会将左操作数(即派生类成员函数指针)隐式转换为基类成员函数指针, 同时生成调整 this 偏移的代码.
+
+    void vertify();
+    std::cout << std::endl;
+    vertify();
+    return 0;
+}
+
+// 1. 定义一个绝对简单的类，没有任何继承关系
+struct Simple {
+    int val = 100;
+    void print_nv() { std::cout << "Simple::print_nv" << std::endl; }
+};
+
+// 2. 一个稍微复杂一点的类，有单继承但非多重继承
+struct SingleDerived : public A {
+    int sd_val = 200;
+    void print_nv() { std::cout << "SingleDerived::print_nv" << std::endl; }
+};
+
+void vertify()
+{
+    std::cout << "vertify" << std::endl;
+    // 情况1：简单类的成员函数指针 (理论上最不可能有Thunk)
+    void (Simple::*p_simple)() = &Simple::print_nv;
+    MemberFunctionPointer insp_simple(p_simple);
+    std::cout << "Pointer to Simple::print_nv:\t\t" << insp_simple << std::endl;
+
+    // 情况2：单继承类的成员函数指针 (也几乎不可能有Thunk)
+    void (SingleDerived::*p_single_derived)() = &SingleDerived::print_nv;
+    MemberFunctionPointer insp_single(p_single_derived);
+    std::cout << "Pointer to SingleDerived::print_nv:\t" << insp_single << std::endl;
+}
+```
+

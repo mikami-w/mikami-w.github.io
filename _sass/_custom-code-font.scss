@@ -1,0 +1,48 @@
+// 文件名: _custom-code-font.scss
+// 描述: 用于美化 Markdown 代码块和行内代码的字体与样式
+
+// --- 1. 定义一个编程字体栈变量 ---
+// 你可以根据自己的喜好调整字体的优先顺序。
+// Fira Code 和 JetBrains Mono 是非常流行的、支持连字(ligatures)的编程字体。
+$font-family-monospace: "Consolas", "JetBrains Mono", "Cascadia Code", "Menlo", "Monaco", "Liberation Mono", "Courier New", monospace;
+
+// --- 2. 样式化行内代码 (inline code) ---
+// 对应 Markdown 中的 `(something)`
+// 我们给它一个浅色的背景，让它在文本中更突出。
+// 使用 *:not(pre) > code 确保这个样式不会影响到下面定义的代码块中的 <code> 标签。
+*:not(pre) > code {
+  font-family: $font-family-monospace;
+  font-size: 0.9em; // 字体稍小一些，与正文区分
+  padding: 0.2em 0.4em;
+  margin: 0 0.2em;
+  background-color: rgba(27, 31, 35, 0.05); // 一个非常淡的灰色背景
+  border-radius: 6px; // 圆角效果
+}
+
+// --- 3. 样式化代码块 (code blocks) ---
+// 对应 Markdown 中的 ```(something)```
+// 通常会被 Jekyll 解析成 <pre><code>...</code></pre> 的结构，
+// 并且最外层可能还有一个 <div class="highlight">
+
+.highlight,
+pre {
+  font-family: $font-family-monospace;
+  background-color: #f6f8fa; // 代码块的背景色
+  border-radius: 8px;        // 圆角效果
+  padding: 1em;              // 内边距，让代码与边框有距离
+  margin: 1.5em 0;           // 外边距，与上下文分开
+  overflow-x: auto;          // 这是关键！当代码行太长时，出现水平滚动条，而不是破坏页面布局。
+
+  // 针对代码块内部的 <code> 标签
+  code {
+    font-family: inherit; // 继承父元素 <pre> 的字体
+    font-size: 0.95em;    // 调整代码字体大小
+    line-height: 1.6;     // 设置合适的行高，增加可读性
+
+    // 重置可能从行内代码继承来的样式
+    background: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+  }
+}
