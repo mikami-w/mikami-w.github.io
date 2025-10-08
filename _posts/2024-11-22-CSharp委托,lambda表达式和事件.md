@@ -28,7 +28,7 @@ sidebar: []
 
 使用委托时, 也必须经过这两个步骤. 定义委托时要告诉编译器这种类型的委托表示哪种类型的方法, 然后实例化该委托的一个或多个对象来使用委托. 委托的类型安全性非常高, 定义时必须给出方法签名和返回类型.
 
-```C#
+```c#
 public delegate void IntMethodInvoker(int x);
 ```
 
@@ -42,7 +42,7 @@ public delegate void IntMethodInvoker(int x);
 
 ​	下面的代码展示了如何使用委托:
 
-```C#
+```c#
 private delegate string GetAString();
 public static void Main()
 {
@@ -58,7 +58,7 @@ public static void Main()
 
 ​	为减少输入量, 在实例化委托对象时可以直接使用方法名称而不使用`new`关键字, 这称为委托推断. 例如下面两个初始化语句是等价的:
 
-```C#
+```c#
 GetAString stringMethod = new GetAString(x.ToString);
 GetAString stringMethod = x.ToString;
 ```
@@ -80,7 +80,7 @@ GetAString stringMethod = x.ToString;
 
 ​	前面使用的每个办法都只包含一个方法调用. 调用委托的次数与调用方法的次数相同. 如果要用这个委托调用多个方法, 可以多次赋值后多次调用. 但是, **委托可以包含多个方法**, 这种委托成为**多播委托**. 一般情况下, 如果调用多播委托, 就可以**按添加方法的顺序**连续调用多个方法, 这是因为目前绝大多数实现都会按照方法添加顺序执行各个方法, 且会保证在第一个方法调用完成之后在调用第二个方法(即使出现延迟或复杂操作).
 
-```C#
+```c#
 using System;
 using System.Threading;
 
@@ -144,7 +144,7 @@ Method C completed.
 
 ​	下面用可定义排序规则的冒泡排序说明委托的用途. `BubbleSorter`类实现一个静态方法`Sort<T>()`方法, 用于排序.
 
-```C#
+```c#
 class BubbleSorter
 {
     public static void Sort<T>(IList<T> sortArray, Func<T, T, bool> comparison)
@@ -174,7 +174,7 @@ class BubbleSorter
 
 ​	C# 2 中引入了匿名方法的语法, 使用`delegate`关键字创建匿名函数:
 
-```C#
+```c#
 //var在这里实际是 Func<string, int>?
 var Fn1 = delegate(string param)
 {
@@ -198,7 +198,7 @@ var Fn1 = delegate(string param)
   * 如果这一条语句是`return`语句, 则省略花括号与`return`关键字直接在`=>`右侧写出要返回的值;
   * 如果这一条语句不是`return`语句, 则直接在`=>`右侧写出该语句.
 
-```C#
+```c#
 Func<string, string> expr1 = param =>
 {
     param += "end of string.";
@@ -218,7 +218,7 @@ C# 中不允许在 lambda 表达式本身像 C++ 中那样使用`->`语法显式
 
 ​	lambda 表达式可以捕获并访问 lambda 方法体外的变量, 这就是 C# 中的闭包. 
 
-```C#
+```c#
 int someVal = 5;
 Action<int> f = x => someVal += x;
 f(2);	//after this, someVal is 7
@@ -246,7 +246,7 @@ Console.WriteLine(someVal);	//output: 10
 
 ​	下面先给出一段示例代码, 再逐一解释其组成成分. 在该示例中, 我们定义了一个简单的 Calculator 类, 它可以对两个数进行加, 减, 乘, 除操作, 并在操作完成时触发一个事件. 
 
-```C#
+```c#
 using System;
 
 public class Calculator
@@ -352,7 +352,7 @@ public class Program
 
 ​	`EventHandler`与`EventHandler<TEventArgs>`是用于事件处理的标准委托类型. 前者用于处理无需事件数据的委托, 后者用于处理需要事件数据, `TEventArgs`是事件数据类. 二者声明如下:
 
-```C#
+```c#
 public delegate void EventHandler(object sender, EventArgs e);
 public delegate void EventHandler<TEventArgs>(object sender, TEventArgs e) where TEventArgs : EventArgs;
 ```
@@ -365,7 +365,7 @@ public delegate void EventHandler<TEventArgs>(object sender, TEventArgs e) where
 
 ​	因为事件基于委托, 所以需要被声明为事件的是一个委托. 事件可以使用访问限制修饰符, 一般情况下将事件声明为`public`.
 
-```C#
+```c#
 public event EventHandler<CalculationEventArgs> CalculationPerformed;
 ```
 
@@ -379,7 +379,7 @@ public event EventHandler<CalculationEventArgs> CalculationPerformed;
 ​	如果用上述一行代码来声明事件, C# 会自动为事件提供默认的`add`和`remove`访问器, 当有订阅者订阅事件时, C# 会自动为`CalculationPerformed`事件注册和取消注册`EventHandler<CalculationEventArgs>`委托. 
 ​	如果需要对事件更灵活的操作, 则应该像使用属性一样先定义一个委托变量, 再用事件的`add`和`remove`方法添加和删除委托:
 
-```C#
+```c#
 private EventHandler<CalculationEventArgs> _calculationPerformed;
 public event EventHandler<CalculationEventArgs> CalculationPerformed
 {
@@ -397,7 +397,7 @@ public event EventHandler<CalculationEventArgs> CalculationPerformed
 
 ​	下面演示了如何防止订阅者的重复订阅:
 
-```C#
+```c#
 public event EventHandler<CalculationEventArgs> CalculationPerformed
 {
     add
@@ -425,13 +425,13 @@ public event EventHandler<CalculationEventArgs> CalculationPerformed
 
 ​	示例代码中`Calculator.OnCalculationPerformed`方法负责在发布者中触发该事件. 在负责运算的方法中, 每次计算执行后都会调用该方法来触发本次事件. 示例中也可以直接使用
 
-```C#
+```c#
 CalculationPerformed?.Invoke(this, new CalculationEventArgs("multiply", x, y, result));
 ```
 
 来代替方法中触发事件的
 
-```C#
+```c#
 OnCalculationPerformed(new CalculationEventArgs("multiply", x, y, result));
 ```
 
@@ -443,7 +443,7 @@ OnCalculationPerformed(new CalculationEventArgs("multiply", x, y, result));
 
 ​	首先在订阅者类中编写事件处理方法, 该方法的签名必须与事件的委托类型匹配, 如示例代码中的`Program.OnCalculationPerformed`方法:
 
-```C#
+```c#
 static void OnCalculationPerformed(object sender, CalculationEventArgs e)
 {
 	Console.WriteLine("{0} {1} {2} = {3}", e.X, e.Operation, e.Y, e.Result);
@@ -452,7 +452,7 @@ static void OnCalculationPerformed(object sender, CalculationEventArgs e)
 
 ​	有了该事件处理方法就可以用该方法来注册到事件. 在`Main`方法或其他地方实例化发布者和订阅者(如果有需要), 并使用`+=`运算符订阅事件:
 
-```C#
+```c#
 calculator.CalculationPerformed += OnCalculationPerformed;
 ```
 
@@ -460,7 +460,7 @@ calculator.CalculationPerformed += OnCalculationPerformed;
 
 ​	如果需要取消订阅, 可以使用`-=`运算符来将某个方法从事件中取消订阅:
 
-```C#
+```c#
 calculator.CalculationPerformed -= OnCalculationPerformed;
 ```
 
