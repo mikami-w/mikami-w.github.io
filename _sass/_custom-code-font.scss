@@ -2,10 +2,10 @@
 
 /* 1. 定义可轻松修改的变量 */
 :root {
-  --code-font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', Consolas, Menlo, Monaco, 'Liberation Mono', 'Courier New', monospace;
+  --code-font-family: Consolas, 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', Menlo, Monaco, 'Liberation Mono', 'Courier New', monospace;
   
   --code-font-size: 0.9em;       /* 行内代码字体大小 */
-  --code-block-font-size: 0.95em; /* 代码块字体大小 */
+  --code-block-font-size: 1.0em; /* 代码块字体大小 */
   
   --code-inline-bg-color: #f3f4f6;   /* 行内代码背景色 (淡灰色) */
   --code-block-bg-color: #f6f8fa;    /* 代码块背景色 (GitHub 风格淡灰色) */

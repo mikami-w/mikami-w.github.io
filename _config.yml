@@ -25,7 +25,7 @@
 # in the templates via {{ site.myvariable }}.
 
 title: 三上のBlog
-email: mikami@outlook.com
+email: m1kami@outlook.com
 author: Mikami
 
 # Copyright setting
@@ -74,26 +74,26 @@ header_transparent: true
 sitemap: true
 
 # If you want to change site language, you can set lang option
-lang: "zh-CN"  # default lang is en
+# lang: "zh-CN"  # default lang is en
 
 # Translate languges
 # langs refer to https://cloud.google.com/translate/docs/languages
-translate_langs:
-  - lang: en
-    img: https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png
-    text: English
+# translate_langs:
+#   - lang: en
+#     img: https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png
+#     text: English
 #
 #   - lang: fr
 #     img: https://cdn.countryflags.com/thumbs/france/flag-400.png
 #     text: French
 #
-  - lang: zh-CN
-    img: https://cdn.countryflags.com/thumbs/china/flag-400.png
-    text: Chinese(Simple)
+  # - lang: zh-CN
+  #   img: https://cdn.countryflags.com/thumbs/china/flag-400.png
+  #   text: Chinese(Simple)
 #
-  - lang: ja
-    img: https://cdn.countryflags.com/thumbs/japan/flag-400.png
-    text: Japanese
+  # - lang: ja
+  #   img: https://cdn.countryflags.com/thumbs/japan/flag-400.png
+  #   text: Japanese
 #
 #   - lang: ko
 #     img: https://cdn.countryflags.com/thumbs/south-korea/flag-400.png
@@ -165,22 +165,22 @@ defaults:
   home:
     heading: "三上のBlog"
     subheading: "ヰ世界情緒起動！"
-    banner: "https://pbs.twimg.com/media/GfW9Fw1bQAAA_Ct.jpg?name=orig"
+    banner: "https://pbs.twimg.com/media/GqoeUT1XYAEigwK.jpg?name=orig"
 
 # Banner default settings
 # These banner settings are for global banner default, but you can also
 # config it by the front matter for one specific post
-banner:
+# banner:
 #   video: null             # Video banner source
 #   loop: true              # Video loop
 #   volume: 0               # Video volume (100% is 1.0)
 #   start_at: 0             # Video start time
-  image: "https://pbs.twimg.com/media/GqoeUT1XYAEigwK.jpg?name=orig"             # Image banner source
+  # image: "https://pbs.twimg.com/profile_banners/1056885839454556160/1742096313"             # Image banner source
 #   opacity: 1.0            # Banner opacity (100% is 1.0)
 #   background: "rgba(0, 0, 0, 0.8)"  # Banner background (Could be a image)
-#   height: "640px"         # Banner default height
+  # height: "60vh"         # Banner default height
 #   min_height: null        # Banner minimum height
-  heading_style: "color: white"     # Custom heading style (e.g. "font-weight: bold; text-decoration: underline")
+#   heading_style: "color: white"     # Custom heading style (e.g. "font-weight: bold; text-decoration: underline")
 #   subheading_style: null  # Custom subheading style (e.g. color: gold)
 
 # Excerpt settings
@@ -192,7 +192,7 @@ banner:
 #   text_size: 350          # Words default size
 
 # Pagination setting
-# paginate: 5
+paginate: 5
 
 # Photo previewer settings (PhotoSwipe 5)
 # the options please refer to: https://photoswipe.com/options/
@@ -246,8 +246,6 @@ markdown: kramdown
 kramdown:
   input: GFM
 
-
-# Build settings
 theme: jekyll-theme-yat
 plugins:
   - jekyll-feed
@@ -264,7 +262,8 @@ plugins:
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
 #
-# exclude:
+exclude:
+  - _posts/templates
 #   - .sass-cache/
 #   - .jekyll-cache/
 #   - gemfiles/
