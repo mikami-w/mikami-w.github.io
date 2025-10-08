@@ -1,48 +1,73 @@
-// 文件名: _custom-code-font.scss
-// 描述: 用于美化 Markdown 代码块和行内代码的字体与样式
+/* --- 自定义代码样式：清晰、现代、高可读 --- */
 
-// --- 1. 定义一个编程字体栈变量 ---
-// 你可以根据自己的喜好调整字体的优先顺序。
-// Fira Code 和 JetBrains Mono 是非常流行的、支持连字(ligatures)的编程字体。
-$font-family-monospace: "Consolas", "JetBrains Mono", "Cascadia Code", "Menlo", "Monaco", "Liberation Mono", "Courier New", monospace;
-
-// --- 2. 样式化行内代码 (inline code) ---
-// 对应 Markdown 中的 `(something)`
-// 我们给它一个浅色的背景，让它在文本中更突出。
-// 使用 *:not(pre) > code 确保这个样式不会影响到下面定义的代码块中的 <code> 标签。
-*:not(pre) > code {
-  font-family: $font-family-monospace;
-  font-size: 0.9em; // 字体稍小一些，与正文区分
-  padding: 0.2em 0.4em;
-  margin: 0 0.2em;
-  background-color: rgba(27, 31, 35, 0.05); // 一个非常淡的灰色背景
-  border-radius: 6px; // 圆角效果
+/* 1. 定义可轻松修改的变量 */
+:root {
+  --code-font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', Consolas, Menlo, Monaco, 'Liberation Mono', 'Courier New', monospace;
+  
+  --code-font-size: 0.9em;       /* 行内代码字体大小 */
+  --code-block-font-size: 0.95em; /* 代码块字体大小 */
+  
+  --code-inline-bg-color: #f3f4f6;   /* 行内代码背景色 (淡灰色) */
+  --code-block-bg-color: #f6f8fa;    /* 代码块背景色 (GitHub 风格淡灰色) */
+  
+  --code-text-color: #24292e;       /* 代码文字颜色 (深灰色) */
+  --code-border-radius: 6px;        /* 圆角大小 */
 }
 
-// --- 3. 样式化代码块 (code blocks) ---
-// 对应 Markdown 中的 ```(something)```
-// 通常会被 Jekyll 解析成 <pre><code>...</code></pre> 的结构，
-// 并且最外层可能还有一个 <div class="highlight">
+/* 2. 行内代码样式 `code` */
+/* 使用 :not(pre) > code 来确保此样式不会应用到代码块内的 code 标签上 */
+:not(pre) > code {
+  font-family: var(--code-font-family);
+  font-size: var(--code-font-size);
+  color: var(--code-text-color);
+  background-color: var(--code-inline-bg-color);
+  padding: 0.2em 0.4em;
+  margin: 0 0.1em;
+  border-radius: var(--code-border-radius);
+  white-space: nowrap; /* 防止行内代码意外换行 */
+}
 
+/* 3. 代码块样式 <pre> 和 .highlight */
+/* .highlight 是 Jekyll 语法高亮插件 Rouge 常用的外层容器 */
 .highlight,
 pre {
-  font-family: $font-family-monospace;
-  background-color: #f6f8fa; // 代码块的背景色
-  border-radius: 8px;        // 圆角效果
-  padding: 1em;              // 内边距，让代码与边框有距离
-  margin: 1.5em 0;           // 外边距，与上下文分开
-  overflow-x: auto;          // 这是关键！当代码行太长时，出现水平滚动条，而不是破坏页面布局。
+  font-family: var(--code-font-family);
+  font-size: var(--code-block-font-size);
+  color: var(--code-text-color);
+  background-color: var(--code-block-bg-color);
+  
+  padding: 1em;
+  margin: 1.5em 0;
+  border-radius: var(--code-border-radius);
+  border: 1px solid #e1e4e8;
+  
+  /* 关键：处理长代码行，出现水平滚动条 */
+  overflow-x: auto;
+}
 
-  // 针对代码块内部的 <code> 标签
-  code {
-    font-family: inherit; // 继承父元素 <pre> 的字体
-    font-size: 0.95em;    // 调整代码字体大小
-    line-height: 1.6;     // 设置合适的行高，增加可读性
+/* 针对代码块内部的 <code> 标签进行微调 */
+.highlight pre,
+pre {
+  /* 重置 <pre> 标签可能带有的默认边距和内边距 */
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent; /* 背景由外层容器控制 */
+}
 
-    // 重置可能从行内代码继承来的样式
-    background: none;
-    padding: 0;
-    margin: 0;
-    border-radius: 0;
-  }
+.highlight code,
+pre code {
+  /* 重置从行内代码继承的样式 */
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  
+  /* 确保字体设置正确 */
+  font-family: inherit; /* 继承外层 pre 的字体设置 */
+  font-size: inherit;   /* 继承外层 pre 的字体大小 */
+  color: inherit;       /* 继承外-层 pre 的文字颜色 */
+  
+  line-height: 1.6;     /* 调整行高以获得最佳可读性 */
+  white-space: pre;     /* 保持代码的空白符和换行 */
 }
