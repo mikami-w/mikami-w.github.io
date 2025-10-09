@@ -67,8 +67,8 @@ header_transparent: true
 # content_width: "920px"
 
 # Google analytics - GA4
-# google_analytics: [Measurement ID]
-# enableDNT: "false"
+google_analytics: G-QBYW246PMQ
+enableDNT: "false"
 
 # If you want to generate website sitemap, you can set true
 sitemap: true
