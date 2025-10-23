@@ -216,10 +216,10 @@ paginate: 5
 #     color: "#bbb"
 
 # Disqus comments
-# disqus:
-#   shortname: "mikami"
-#   enable_recommendations: false
-#   enable_comments: true
+disqus:
+  shortname: "mikami"
+  enable_recommendations: false
+  enable_comments: true
 
 # Gitment comments
 # gitment:
