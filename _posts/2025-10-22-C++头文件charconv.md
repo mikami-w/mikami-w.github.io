@@ -5,8 +5,6 @@ subtitle: 提供高性能, 无异常, 无内存分配, 且区域设置(locale)�
 author: Mikami
 categories: cpp
 tags: cpp code
-top: 1
-sidebar: []
 ---
 
 `<charconv>` 是 C++17 标准库中引入的一个非常重要且实用的头文件. 它的核心目标是提供**高性能, 无异常, 无内存分配, 且区域设置(locale)无关**的**基本数值类型与字符串之间的相互转换**. 

@@ -5,8 +5,6 @@ subtitle: 强大的编译期优化者
 author: Mikami
 categories: cpp
 tags: cpp code
-top: 1
-sidebar: []
 ---
 
 ### 1. C++ 中 `constexpr` 的用法与作用

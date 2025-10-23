@@ -5,8 +5,6 @@ subtitle: A awesome static site generator.
 author: Mikami
 categories: csharp
 tags: csharp code
-top: 1
-sidebar: []
 ---
 
 # 第八章 委托, lambda表达式和事件
