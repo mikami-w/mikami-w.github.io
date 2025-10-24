@@ -229,8 +229,8 @@ class A<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
 };
 ```
 
-- **机制: ** 这是**偏特化 (Partial Specialization)**. 我们没有固定 `T`, 而是通过 SFINAE 让第二个参数 `Enable` 在 `T` 是浮点数时解析为 `void`, 从而匹配这个特化版本. 
-- **泛化能力: ** **高**. 这是一个**基于规则**的实现. 它会自动匹配**所有**符合 `std::is_floating_point` 规则的类型 (`float`, `double`, `long double`) . 
+- **机制:** 这是**偏特化 (Partial Specialization)**. 我们没有固定 `T`, 而是通过 SFINAE 让第二个参数 `Enable` 在 `T` 是浮点数时解析为 `void`, 从而匹配这个特化版本. 
+- **泛化能力:** **高**. 这是一个**基于规则**的实现. 它会自动匹配**所有**符合 `std::is_floating_point` 规则的类型 (`float`, `double`, `long double`) . 
 - **解析 `A<double>`**: `std::enable_if<true>::type` 为 `void`. 特化版本匹配 `A<double, void>`, 优于主模板, 被选中. 
 - **解析 `A<int>`**: `std::enable_if<false>::type` 失败. SFINAE 触发, 特化版本被忽略. 主模板 `A<int, void>` 被选中. 
 
@@ -257,8 +257,8 @@ class A<float>
 };
 ```
 
-- **机制: ** 这是**显式特化 (Explicit/Full Specialization)**. `template<>` 表明我们为所有模板参数提供了具体类型. 
-- **泛化能力: ** **低**. 这是一个**基于列表**的实现. 你必须为你关心的**每一个**具体类型编写一个特化版本. 
+- **机制:** 这是**显式特化 (Explicit/Full Specialization)**. `template<>` 表明我们为所有模板参数提供了具体类型. 
+- **泛化能力:** **低**. 这是一个**基于列表**的实现. 你必须为你关心的**每一个**具体类型编写一个特化版本. 
 - **解析 `A<double>`**: 精确匹配 `A<double>` 特化版本. 
 - **解析 `A<long double>`**: **匹配失败**. 编译器找不到 `A<long double>` 的显式特化, 因此它会回头使用**主模板** `template<class T>`, 实例化 `A<long double>`. 这很可能不是我们期望的行为. 
 
