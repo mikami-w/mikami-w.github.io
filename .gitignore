@@ -11,4 +11,6 @@ vendor/
 # Others
 .DS_Store
 _posts/templates/
+_posts/new_post.sh
 *Zone.Identifier
+
